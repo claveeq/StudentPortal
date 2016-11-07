@@ -1,8 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
 
+use yii\grid\GridView;
+use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\SearchCompanies */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -24,12 +25,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            // 'company_id',
+            'company_id',
             'company_name',
             'company_email:email',
             'company_address',
-            'company_created_date',
+            // 'company_start_date',
+            // 'company_created_date',
             // 'company_status',
+            [
+            'attribute'=>'company_start_date',
+            'value' => 'company_start_date',
+            'format' => 'raw',
+            'filter' => DatePicker::widget([
+            'model' => $searchModel,
+            'attribute' => 'company_start_date',
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-m-d'
+                ],
+            ])
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use dosamigos\datepicker\DatePicker;
+
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Companies */
@@ -18,7 +20,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'company_address')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'company_status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => 'Select status']) ?>
+    <?= $form->field($model, 'company_start_date')->widget(
+        DatePicker::className(), [
+            'clientOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-m-d'
+            ]
+    ]);?>
+
+    <?= $form->field($model, 'company_status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => '']) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
