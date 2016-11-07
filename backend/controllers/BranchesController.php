@@ -63,19 +63,46 @@ class BranchesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Branches();
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->branch_created_date = date('Y-m-d h:i:s');
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->branch_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->user->can('create-branch')) {
+             $model = new Branches();
+            if ($model->load(Yii::$app->request->post())) {
+                $model->branch_created_date = date('Y-m-d h:i:s');
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->branch_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         }
+        else
+        {
+            throw new NotFoundHttpException('You do not have an access to create a branch :(');  
+        }
+       
     }
 
+    public function actionLists($id)
+    {
+        $countBranches = Branches::find()
+            ->where(['companies_company_id' => $id])
+            ->count();
+
+        $branches = Branches::find()
+            ->where(['companies_company_id' => $id])
+            ->all();
+
+            if($countBranches>0){
+                foreach ($branches as $branch) {
+                    echo "<option value ='".$branch->branch_id."'>".$branch->branch_name."</option>";  
+                }
+            }
+            else
+            {
+                echo "<option value>-</option>";  
+            }
+    }
+    
     /**
      * Updates an existing Branches model.
      * If update is successful, the browser will be redirected to the 'view' page.
